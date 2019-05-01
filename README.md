@@ -70,8 +70,8 @@ off using `reduce`.
 ## Use `reduce` to Create a Transformed `Hash`
 
 Let's put all our bands' members' names in order and print the original and
-sorted Hashes. But reduce behaves a little funnily in `Hash`es so lets memorize
-a tricky bit of syntax.
+sorted Hashes. But reduce behaves a little funnily in `Hash`es so let's
+memorize a tricky bit of syntax.
 
 ```ruby
 bands = {
@@ -85,7 +85,7 @@ bands = {
 bands.reduce({}) do |memo, pair|
   p memo # First block parameter
   p pair # Second block parameter
-  memo # Return value for the block, becomes the memo in the next go-round
+  memo # Return value for the block. It becomes the memo in the next go-round
 end
 {}
 [:joy_division, ["ian", "bernard", "peter", "stephen"]]
@@ -100,7 +100,7 @@ end
 ```
 
 As we can see, our "accumulating" `Hash` called `memo` is the thing we need to
-update. But in each call to our block we receive the pair as a two-element
+update. But in each call to our block, we receive the pair as a two-element
 `Array`. We'd like to split that into the `key` and the `value`. While we could
 use `pair[0]` and `pair[1]`, Ruby provides a nicer way to do that work called
 "destructuring assignment."
@@ -207,7 +207,7 @@ comfortable Ruby programmer.
 
 With this last lesson under your belt, all you need in order to become that
 "truly comfortable Ruby programmer" is a lot of practice. We're going to give a
-quiz quiz to help you test your understanding and then we're going to give you
+quiz to help you test your understanding and then we're going to give you
 lots of labs to practice!
 
 ## Resources
