@@ -165,7 +165,7 @@ Amazing!
 
 ## Use `reduce` to Resolve a Value From a `Hash`
 
-With `Hash`es, we don't use `reduce` to transform them, we can also accumulate
+With `Hash`es, we also use `reduce` to accumulate
 to a single value. Let's find first-most alphabetical band member of the entire
 `Hash`
 
@@ -201,7 +201,7 @@ p firstmost_name
 
 ## Conclusion
 
-With Hash, the most common Enumerables are `each` and `reduce`. Mastering using
+With `Hash`, the most common Enumerables are `each` and `reduce`. Mastering using
 `reduce` to transform a given `Hash` into a new `Hash` is a sign of a truly
 comfortable Ruby programmer.
 
@@ -211,3 +211,8 @@ quiz to help you test your understanding and then we're going to give you
 lots of labs to practice!
 
 ## Resources
+
+* [reduce][]
+
+[reduce]: https://ruby-doc.org/core-2.6.1/Enumerable.html#method-i-reduce
+
