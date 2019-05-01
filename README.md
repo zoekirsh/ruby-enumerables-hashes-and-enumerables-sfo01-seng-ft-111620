@@ -16,7 +16,7 @@ With a `Hash`, we will not use `map`. Instead, we'll use `reduce`, passing
 we'll add to that new-`Hash` argument (the first block parameter, traditionally
 called `memo`), _returning_ the `memo` at the end of each block.
 
-> **LIFE-SAVING BUG AVOIDING TIP**: Working with `reduce` can be tricky many
+> **LIFE-SAVING BUG-AVOIDING TIP**: Working with `reduce` can be tricky. Many
 > programmers forget to return the `memo` at the end and have a tricky bug they
 > can't figure out!
 
