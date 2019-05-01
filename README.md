@@ -11,11 +11,21 @@
 While this module has focused on using Enumerables within `Array`s, `Hash`es
 _also_ have _all the same_ Enumerables &mdash; although some are less useful!
 
-With a `Hash`, we should prefer to calculate a new `Hash` based on the pairs
-with `reduce`, and we should use `each` and the Hash-relevant `each_pair` only
-as a last resort.
+With a `Hash`, we will not use `map`. Instead, we'll use `reduce`, passing
+`reduce` a _new_ `Hash` to populate as its argument. Inside `reduce`'s block,
+we'll add to that new-`Hash` argument (the first block parameter, traditionally
+called `memo`), _returning_ the `memo` at the end of each block.
 
-For the remainder of this lesson we'll be using this Hash as a data source.
+> **LIFE-SAVING BUG AVOIDING TIP**: Working with `reduce` can be tricky many
+> programmers forget to return the `memo` at the end and have a tricky bug they
+> can't figure out!
+
+Sometimes, before starting our `reduce` it's helpful to work with the `Hash`,
+the `each` and the `Hash`-relevant `each_pair` methods can help us get a handle
+on the situation.
+
+For the remainder of this lesson, we'll be using the following `Hash` as a data
+source.
 
 ```ruby
 bands = {
@@ -32,7 +42,7 @@ bands = {
 For a simple exercise that `each` is perfect for, let's print out each pair:
 
 ```ruby
-bands.each{ |pair | p pair } #=>
+bands.each{ |pair| p pair } #=>
 # [:joy_division, ["ian", "bernard", "peter", "stephen"]]
 # [:the_smiths, ["johnny", "andy", "morrissey", "mike"]]
 # [:the_cramps, ["lux", "ivy", "nick"]]
