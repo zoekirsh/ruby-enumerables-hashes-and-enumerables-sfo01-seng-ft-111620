@@ -27,6 +27,8 @@ on the situation.
 For the remainder of this lesson, we'll be using the following `Hash` as a data
 source.
 
+![Band Logos](https://curriculum-content.s3.amazonaws.com/ruby-enumerables/hashes-and-enumerables/Image_72_BandCollageBanner.png)
+
 ```ruby
 bands = {
   joy_division: %w[ian bernard peter stephen],
@@ -127,6 +129,8 @@ end
 # ["ian", "bernard", "peter", "stephen"] ... etc.
 ```
 
+![Sorted Hash](https://curriculum-content.s3.amazonaws.com/ruby-enumerables/hashes-and-enumerables/Image_76_SortedHasn.png)
+
 Thanks to destructuring assignment (using the parentheses), we crack open the
 `Array` that was in the `pair` parameter and put element `0` in `key` and
 element `1` in `value`. With this in place, it's easy to create that
@@ -161,9 +165,11 @@ p sorted_member_list
 :talking_heads=>["chris", "david", "jerry", "tina"]}
 ```
 
-Amazing!
+Amazing! 
 
 ## Use `reduce` to Resolve a Value From a `Hash`
+
+![Resolved Value](https://curriculum-content.s3.amazonaws.com/ruby-enumerables/hashes-and-enumerables/Image_76_Resolve%20a%20Value.png)
 
 With `Hash`es, we also use `reduce` to accumulate
 to a single value. Let's find first-most alphabetical band member of the entire
