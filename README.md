@@ -1,224 +1,199 @@
-# Hashes and Enumerables
+# Hashes and Enumerables: Iterating Over Hashes With `#each`
 
-## Learning Goals
+## Overview
 
-- Use `each` and `each_pair` to print out a `Hash`
-- Use `reduce` to create a transformed `Hash`
-- Use `reduce` to resolve a value from a `Hash`
+We'll use iteration to access and manipulate data from hashes.
 
-## Introduction
+## Objectives
 
-While this module has focused on using Enumerables within `Array`s, `Hash`es
-_also_ have _all the same_ Enumerables &mdash; although some are less useful!
+1. Distinguish iterating over arrays from iterating over hashes.
+1. Use `#each` to iterate over a hash.
 
-With a `Hash`, we will not use `map`. Instead, we'll use `reduce`, passing
-`reduce` a _new_ `Hash` to populate as its argument. Inside `reduce`'s block,
-we'll add to that new-`Hash` argument (the first block parameter, traditionally
-called `memo`), _returning_ the `memo` at the end of each block.
+## Iterating Over Hashes
 
-> **LIFE-SAVING BUG-AVOIDING TIP**: Working with `reduce` can be tricky. Many
-> programmers forget to return the `memo` at the end and have a tricky bug they
-> can't figure out!
+Previously, we've compared hashes to dictionaries or storage containers. Just
+like with these storage methods in real life, not only do we need to access our
+stored information, but we need to utilize it in some way. This is where
+iteration comes in.
 
-Sometimes, before starting our `reduce` it's helpful to work with the `Hash`,
-the `each` and the `Hash`-relevant `each_pair` methods can help us get a handle
-on the situation.
-
-For the remainder of this lesson, we'll be using the following `Hash` as a data
-source.
-
-![Band Logos](https://curriculum-content.s3.amazonaws.com/ruby-enumerables/hashes-and-enumerables/Image_72_BandCollageBanner.png)
+Without iteration, we would have to jump through some serious hoops in order to
+access every key/value pair of our hash. We would have to know the key of each
+pair and write something along the following lines:
 
 ```ruby
-bands = {
-  joy_division: %w[ian bernard peter stephen],
-  the_smiths: %w[johnny andy morrissey mike],
-  the_cramps: %w[lux ivy nick],
-  blondie: %w[debbie chris clem jimmy nigel],
-  talking_heads: %w[david tina chris jerry]
-}
+my_hash = {key1: value1, key2: value2, key3: value3}
+
+my_hash[:key1]
+my_hash[:key2]
+my_hash[:key3]
 ```
 
-## Use `each` and `each_pair` to Print Out a `Hash`
+This is painful, tedious, and impractical. What happens when we add more keys to
+our hash? What happens, as will certainly be the case in some of the programs
+you will build, when a hash contains hundreds or even thousands of key/value
+pairs?
 
-For a simple exercise that `each` is perfect for, let's print out each pair:
+Instead, we will use iteration to programmatically access and operate on all of
+the key/value pairs contained in a hash.
 
-```ruby
-bands.each{ |pair| p pair } #=>
-# [:joy_division, ["ian", "bernard", "peter", "stephen"]]
-# [:the_smiths, ["johnny", "andy", "morrissey", "mike"]]
-# [:the_cramps, ["lux", "ivy", "nick"]]
-# [:blondie, ["debbie", "chris", "clem", "jimmy", "nigel"]]
-# [:talking_heads, ["david", "tina", "chris", "jerry"]]
-```
+## The `#each` Method and Hashes
 
-We can see that the block has an Array with two arguments: the key and the
-value _yielded_ to it.
-
-A more _expressive_ synonym is `each_pair`, which does the same thing:
+The `#each` iterator that we encountered in previous units can also be used to
+iterate over hashes. When we iterate over arrays, we iterate over one element at
+a time––each index in an array contains just one object. In a hash however, data
+is stored in key/value pairs so we will be iterating over those _pairs_. Let's
+take a look:
 
 ```ruby
-bands.each_pair{ |pair | p pair } #=>
-# [:joy_division, ["ian", "bernard", "peter", "stephen"]]
-# [:the_smiths, ["johnny", "andy", "morrissey", "mike"]]
-# [:the_cramps, ["lux", "ivy", "nick"]]
-# [:blondie, ["debbie", "chris", "clem", "jimmy", "nigel"]]
-# [:talking_heads, ["david", "tina", "chris", "jerry"]]
-```
+hash = {key1: "value1", key2: "value2"}
 
-Just like with an `Array`, if you want to do a transformation, you're better
-off using `reduce`.
-
-## Use `reduce` to Create a Transformed `Hash`
-
-Let's put all our bands' members' names in order and print the original and
-sorted Hashes. But reduce behaves a little funnily in `Hash`es so let's
-memorize a tricky bit of syntax.
-
-```ruby
-bands = {
-  joy_division: %w[ian bernard peter stephen],
-  the_smiths: %w[johnny andy morrissey mike],
-  the_cramps: %w[lux ivy nick],
-  blondie: %w[debbie chris clem jimmy nigel],
-  talking_heads: %w[david tina chris jerry]
-}
-
-bands.reduce({}) do |memo, pair|
-  p memo # First block parameter
-  p pair # Second block parameter
-  memo # Return value for the block. It becomes the memo in the next go-round
+hash.each do |key, value|
+  puts "#{key}: #{value}"
 end
-{}
-[:joy_division, ["ian", "bernard", "peter", "stephen"]]
-{}
-[:the_smiths, ["johnny", "andy", "morrissey", "mike"]]
-{}
-[:the_cramps, ["lux", "ivy", "nick"]]
-{}
-[:blondie, ["debbie", "chris", "clem", "jimmy", "nigel"]]
-{}
-[:talking_heads, ["david", "tina", "chris", "jerry"]]
 ```
 
-As we can see, our "accumulating" `Hash` called `memo` is the thing we need to
-update. But in each call to our block, we receive the pair as a two-element
-`Array`. We'd like to split that into the `key` and the `value`. While we could
-use `pair[0]` and `pair[1]`, Ruby provides a nicer way to do that work called
-"destructuring assignment."
+When we iterate over a hash, the `#each` method (as well as any other iteration
+method you use) yields the key/value pair _together_ into the block. Inside that
+block, you have access to the key _and_ the value, and can manipulate either one
+or both.
+
+Drop into IRB and enter in the above code. You should see this output:
 
 ```ruby
-bands = {
-  joy_division: %w[ian bernard peter stephen],
-  the_smiths: %w[johnny andy morrissey mike],
-  the_cramps: %w[lux ivy nick],
-  blondie: %w[debbie chris clem jimmy nigel],
-  talking_heads: %w[david tina chris jerry]
-}
+key1: value1
+key2: value2
+ => {:key1=>"value1", :key2=>"value2"}
+```
 
-bands.reduce({}) do |memo, (key, value)|
-  p memo # First block parameter
-  p key # Second block parameter
-  p value # Second block parameter
-  memo # Return value for the block, becomes the memo in the next go-round
+Inside the iteration we have access to both the key and the value. We can `puts`
+out the key and value of a single pair. The return value, however, is always the
+original hash. **Remember that `#each` returns the original collection on which
+you are calling the method.**
+
+Let's try it out together:
+
+## Code Along I: Cruise Ship
+
+**Open up this repo in your text editor to get started. Follow along with the instructions below to get your tests passing**.
+
+The good news is you're on a cruise ship! The bad news is that you're _not_ on
+vacation. You are a cruise ship director and you're selecting the day's lucky
+ticket winner to the 8:00pm magic show in the super swanky _Blue Room_. The
+criteria for picking the winner is that this person must be staying in Suite A
+and their name must start with the letter "A".
+
+### Our Hash
+
+We'll be operating on a hash of passengers that looks like this:
+
+```ruby
+passengers = {
+suite_a: "Amanda Presley",
+suite_b: "Seymour Hoffman",
+suite_c: "Alfred Tennyson",
+suite_d: "Charlie Chaplin",
+suite_e: "Crumpet the Elf"
+}
+```
+
+Open up `cruise_ship.rb` and you'll see the `passengers` hash, commented out.
+(It's just there to remind you what the hash we are using looks like.) We have a
+method `#select_winner` that will take in the passengers hash as an argument.
+Our job is to code the content of that method such that it returns the lucky
+winner.
+
+### Our Method
+
+We need to iterate over the passengers and collect the name of the passenger who
+is staying in Suite A _and_ whose name begins with the letter "A". Let's give it
+a shot:
+
+Place the following snippet of code inside the `#select_winner` method:
+
+```ruby
+winner = ""
+passengers.each do |suite, name|
+  if suite == :suite_a && name.start_with?("A")
+    winner = name
+  end
 end
 
-#=>
-# {}
-# :joy_division
-# ["ian", "bernard", "peter", "stephen"] ... etc.
+winner
 ```
 
-![Sorted Hash](https://curriculum-content.s3.amazonaws.com/ruby-enumerables/hashes-and-enumerables/Image_76_SortedHasn.png)
+If you run your tests now, the first test should now be passing.
 
-Thanks to destructuring assignment (using the parentheses), we crack open the
-`Array` that was in the `pair` parameter and put element `0` in `key` and
-element `1` in `value`. With this in place, it's easy to create that
-alphabetized roster.
+```text
+#select_winner
+  returns the name of the passenger who stays in suite a and whose name begins with the letter 'A'
+```
+
+### A Closer Look
+
+Let's break this down:
+
+- We iterate through the hash using `#each`. We chose `#each` instead of collect
+  because we don't want to collect the key/value pair that contains the winner,
+  just the _name_ of the winner. With `#each`, we have the control we need to
+  simply grab the winner's name and set it equal to a variable that we can return
+  later on.
+
+- Inside our iteration, we use an `if` statement combined with the `&&` ("and")
+  boolean operator to check if we have the right suite and if the person in that
+  suite has a name that begins with the letter "A".
+
+- If that condition returns true, we've found our winner! We set their name equal
+  to the `winner` variable and end our iteration.
+
+- Then, we call on our `winner` variable to return the name of the lucky winner.
+
+## Code Along II: Happy Birthday
+
+In this example, we are the managers at Chuck E. Cheese's. Chuck E. Cheese's is
+a great place to have a birthday party, and there are several birthdays going on
+here today. Our job is to write a method that operates on a hash of birthday
+kids and wishes them a happy birthday.
+
+### Our Hash
+
+We will be operating on the following hash that tracks birthday kids and their
+associated ages:
 
 ```ruby
-bands = {
-  joy_division: %w[ian bernard peter stephen],
-  the_smiths: %w[johnny andy morrissey mike],
-  the_cramps: %w[lux ivy nick],
-  blondie: %w[debbie chris clem jimmy nigel],
-  talking_heads: %w[david tina chris jerry]
+birthday_kids = {
+  "Timmy" => 9,
+  "Sarah" => 6,
+  "Amanda" => 27
 }
-
-sorted_member_list =  bands.reduce({}) do |memo, (key, value)|
-  memo[key] = value.sort
-  memo
-end
-
-p bands
-p sorted_member_list
-{:joy_division=>["ian", "bernard", "peter", "stephen"], :the_smiths=>["johnny",
-"andy", "morrissey", "mike"], :the_cramps=>["lux", "ivy", "nick"],
-:blondie=>["debbie", "chris", "clem", "jimmy", "nigel"],
-:talking_heads=>["david", "tina", "chris", "jerry"]}
-
-# Space added by us for readability
-
-{:joy_division=>["bernard", "ian", "peter", "stephen"], :the_smiths=>["andy",
-"johnny", "mike", "morrissey"], :the_cramps=>["ivy", "lux", "nick"],
-:blondie=>["chris", "clem", "debbie", "jimmy", "nigel"],
-:talking_heads=>["chris", "david", "jerry", "tina"]}
 ```
 
-Amazing! 
+### Our Method
 
-## Use `reduce` to Resolve a Value From a `Hash`
-
-![Resolved Value](https://curriculum-content.s3.amazonaws.com/ruby-enumerables/hashes-and-enumerables/Image_76_Resolve%20a%20Value.png)
-
-With `Hash`es, we also use `reduce` to accumulate
-to a single value. Let's find first-most alphabetical band member of the entire
-`Hash`
+The `#happy_birthday` method is set up to take in the `birthday_kids` hash as an
+argument. We need to code the method such that it `puts` out to the terminal the
+following message for each kid:
 
 ```ruby
-bands = {
-  joy_division: %w[ian bernard peter stephen],
-  the_smiths: %w[johnny andy morrissey mike],
-  the_cramps: %w[lux ivy nick],
-  blondie: %w[debbie chris clem jimmy nigel],
-  talking_heads: %w[david tina chris jerry]
-}
-
-firstmost_name = bands.reduce(nil) do |memo, (key, value)|
-  # On the first pass, we don't have a name, so just grab the first one.
-  memo = value[0] if !memo
-
-  # Sort that array of names
-  sorted_names = value.sort
-
-  # If string comparison says the sorted name of the array is earlier than
-  # the memo, it becomes the new memo.
-  memo = sorted_names[0] if sorted_names[0] <= memo
-
-  # Return the memo as per reduce rules
-  # (Try adding 'p' in front of memo to see how it changes as the enumerate the
-  # pair of the hash!)
-  memo
-end
-p firstmost_name
-
-"andy"
+"Happy Birthday #{kids_name}! You are now #{age} years old!"
 ```
 
-## Conclusion
+Let's give it a shot:
 
-With `Hash`, the most common Enumerables are `each` and `reduce`. Mastering using
-`reduce` to transform a given `Hash` into a new `Hash` is a sign of a truly
-comfortable Ruby programmer.
+```ruby
+def happy_birthday(birthday_kids)
+  birthday_kids.each do |kids_name, age|
+    puts "Happy Birthday #{kids_name}! You are now #{age} years old!"
+  end
+end
+```
 
-With this last lesson under your belt, all you need in order to become that
-"truly comfortable Ruby programmer" is a lot of practice. We're going to give a
-quiz to help you test your understanding and then we're going to give you
-lots of labs to practice!
+Here we are using `#each` to iterate over each pair of kids name/age. We are
+yielding the key/value pair to the block of code between the `do`/`end` keywords
+by assigning the variables `kids_name` and `age` in between the pipes, `| |`, to
+be the placeholders for each key/value pair.
 
-## Resources
+Then, we can use those variable names in our string interpolation to `puts` out
+the actual values they point to at each step of the iteration.
 
-* [reduce][]
-
-[reduce]: https://ruby-doc.org/core-2.6.1/Enumerable.html#method-i-reduce
-
+Running the test suite with the above code should show all tests passing. You're
+ready to move on!
